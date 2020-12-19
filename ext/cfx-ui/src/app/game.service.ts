@@ -925,6 +925,8 @@ export class DummyGameService extends GameService {
 	private _localhostPort = '';
 	private _language = '';
 
+	private favorites: string[] = [];
+
 	constructor(@Inject(LocalStorage) private localStorage: any) {
 		super();
 
@@ -945,6 +947,8 @@ export class DummyGameService extends GameService {
 
 		this.handleSignin(profile);
 		this.minModeChanged.next(false);
+
+		this.favorites =  JSON.parse(localStorage.getItem('favorites')) || [];
 	}
 
 	connectTo(server: Server, enteredAddress?: string) {
@@ -1012,7 +1016,9 @@ export class DummyGameService extends GameService {
 	}
 
 	isMatchingServer(type: string, server: Server): boolean {
-		if (type == 'premium') {
+		if (type == 'favorites') {
+			return this.favorites.indexOf(server.address) >= 0;
+		} else if (type == 'premium') {
 			return server.data.vars && server.data.vars.premium;
 		}
 
@@ -1021,6 +1027,26 @@ export class DummyGameService extends GameService {
 
 	toggleListEntry(list: string, server: Server, isInList: boolean) {
 		console.log(`toggling ${list} entry ${server.address} (${isInList})`);
+
+		if (this.isMatchingServer(list, server) !== isInList) {
+			if (isInList) {
+				if (list == 'favorites') {
+					this.favorites.push(server.address);
+				}
+			} else {
+				if (list == 'favorites') {
+					this.favorites = this.favorites.filter(a => a != server.address);
+				}
+			}
+		}
+
+		if (list == 'favorites') {
+			this.saveFavorites();
+		}
+	}
+
+	private saveFavorites() {
+		localStorage.setItem('favorites', JSON.stringify(this.favorites));
 	}
 
 	exitGame(): void {

@@ -57,7 +57,7 @@ div.theRoot {
 	z-index: 100;
 }
 
-.webapp ::ng-deep .ping, .webapp ::ng-deep .actions, .webapp ::ng-deep .max-ping, .webapp ::ng-deep app-servers-detail .favorite {
+.webapp ::ng-deep .ping, .webapp ::ng-deep .max-ping {
 	display: none !important;
 }
 

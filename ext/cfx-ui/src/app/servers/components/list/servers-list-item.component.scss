@@ -165,6 +165,8 @@
 			}
 
 			&.fav {
+				max-width: var(--q2);
+
 				justify-content: center;
 
 				border-right: solid 2px transparent;
@@ -204,9 +206,6 @@
 
 				@include theme() using ($theme) {
 					color: gtv($theme, fgColor);
-					border: solid 2px rgba(gtv($theme, accentColor1), .5);
-					border-top: none;
-					border-bottom: none;
 				};
 
 				.booster {
@@ -277,7 +276,13 @@
 
 			transition: none;
 
-			&.fav {
+			@include theme() using ($theme) {
+				border-left: solid 2px rgba(gtv($theme, accentColor1), .5);
+				border-top: none;
+				border-bottom: none;
+			};
+
+			&:last-child {
 				@include theme() using ($theme) {
 					border-right: solid 2px rgba(gtv($theme, accentColor1), .5);
 				}
